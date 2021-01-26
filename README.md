@@ -2,6 +2,7 @@
 
 ## To Do PROCEDURE & FUNCTION & TRIGGER
 - [x] Book a Room
+- [x] Calculate Booking Price
 - [ ] Generate Payment (Trigger)
 - [x] Create Coupon
 - [x] Check Wanted Room Availability
@@ -18,7 +19,7 @@
 - [x] Create Account
 
 ## To Do SELECT
-- [ ] Get Price Info
+- [ ] Get Booking Price Info
 - [ ] Get a User All Booking Info
 - [ ] Get a Booking Info
 - [ ] Get All Booking Info
