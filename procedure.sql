@@ -153,6 +153,18 @@ CREATE PROCEDURE createCoupon
     @value NUMERIC
 AS
 BEGIN
+    IF @quota <= 0
+    BEGIN
+        PRINT 'Coupon quota cannot be less than 1!';
+        RETURN;
+    END
+
+    IF @value <= 0
+    BEGIN
+        PRINT 'Coupon value cannot be less than 1!';
+        RETURN;
+    END
+
     IF @valid_from >= @expired_on
     BEGIN
         PRINT 'Expired must be bigger than start!';
