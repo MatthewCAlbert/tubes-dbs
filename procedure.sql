@@ -159,9 +159,9 @@ BEGIN
         RETURN;
     END
 
-    IF (SELECT COUNT(*) FROM Coupons WHERE code = @code AND (valid_from BETWEEN @valid_from AND @expired_on) AND (expired_on BETWEEN @valid_from AND @expired_on)) > 0
+    IF (SELECT COUNT(*) FROM Coupons WHERE code = @code AND ((valid_from BETWEEN @valid_from AND @expired_on) OR (expired_on BETWEEN @valid_from AND @expired_on))) > 0
     BEGIN
-        PRINT 'Cannot use same code with overlapped time!';
+        PRINT 'Cannot create same code with overlapped time!';
         RETURN;
     END
 

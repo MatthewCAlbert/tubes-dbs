@@ -70,6 +70,8 @@ BEGIN
         SELECT "value" FROM Coupons
         WHERE id = @coupon_id
     );
+    IF @amount-@c_value < 0
+        RETURN 0;
     RETURN @amount-@c_value;
 END;
 

@@ -29,3 +29,12 @@ EXEC getAvailableRoom
 @roomtype_id = 6
 
 SELECT dbo.getRoomPrice(8, '2020-12-01','2020-12-02', '07FC88B1-674A-4AB9-BCF2-9C3B46F953BD')
+
+EXEC createCoupon
+    @code = 'TUGASDB', 
+    @valid_from = '2021-01-01',
+    @expired_on = '2021-02-02',
+    @quota = 1,
+    @value = 10000
+
+SELECT * FROM Coupons;
