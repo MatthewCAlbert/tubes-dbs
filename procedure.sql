@@ -131,14 +131,14 @@ BEGIN
             SELECT * FROM Rooms WHERE id NOT IN
             (SELECT r.id FROM Rooms AS r
             INNER JOIN Bookings AS b ON r.id = b.room_id 
-            WHERE (@start BETWEEN b."start" AND b."end") OR (@end BETWEEN b."start" AND b."end"));
+            WHERE (@start BETWEEN b."start" AND b."end") OR (@end BETWEEN b."start" AND b."end") AND (b."status" != 3 AND b."status" != 5));
         END
     ELSE
         BEGIN
             SELECT * FROM Rooms WHERE id NOT IN
             (SELECT r.id FROM Rooms AS r
             INNER JOIN Bookings AS b ON r.id = b.room_id 
-            WHERE (@start BETWEEN b."start" AND b."end") OR (@end BETWEEN b."start" AND b."end")) AND roomtype_id = @roomtype_id;
+            WHERE (@start BETWEEN b."start" AND b."end") OR (@end BETWEEN b."start" AND b."end") AND (b."status" != 3 AND b."status" != 5)) AND roomtype_id = @roomtype_id;
         END
 END;
 

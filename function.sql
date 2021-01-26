@@ -48,7 +48,7 @@ AS
 BEGIN
     IF (SELECT COUNT(*) FROM Rooms AS r
         INNER JOIN Bookings AS b ON r.id = b.room_id 
-        WHERE ((@start BETWEEN b."start" AND b."end") OR (@end BETWEEN b."start" AND b."end")) AND b.room_id = @room_id) < 1
+        WHERE ((@start BETWEEN b."start" AND b."end") OR (@end BETWEEN b."start" AND b."end")) AND (b."status" != 3 AND b."status" != 5) AND b.room_id = @room_id) < 1
         RETURN 1;
     RETURN 0;
 END;
