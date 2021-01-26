@@ -1,9 +1,11 @@
-# Tugas Database Matkul System
+# Tugas Matkul Database System
 
 ## To Do PROCEDURE & FUNCTION & TRIGGER
-- [ ] Book a Room
+- [x] Book a Room
 - [ ] Generate Payment (Trigger)
-- [ ] Get Room Availability (can select date range too) + Check Wanted Room Availability
+- [x] Create Coupon
+- [x] Check Wanted Room Availability
+- [x] Get All Room Available (on date range)
 - [ ] Request Cancellation
 - [ ] Change payment status to request refund (When cancel triggered)
 - [ ] Accept Refund 
@@ -11,13 +13,14 @@
 - [ ] Deny Refund 
 - [ ] Change booking status to cancel denied (When refund denied triggered)
 - [ ] Confirm Payment
-- [ ] Increment Rooms Id and RoomTypes Id (INT)
 - [x] Check Coupon
 - [x] Hash and Verify Password
 - [x] Create Account
 
 ## To Do SELECT
 - [ ] Get Price Info
+- [ ] Get a User All Booking Info
+- [ ] Get a Booking Info
 - [ ] Get All Booking Info
 - [ ] Get sales info (can select date range)
 
@@ -30,7 +33,7 @@
 - 4 : Cancel Denied
 - 5 : Failed
 
-### "Bookings" Table
+### "Payments" Table
 - 0 : Waiting payment
 - 1 : Success
 - 2 : Request Refund

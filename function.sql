@@ -23,19 +23,6 @@ BEGIN
 END;
 
 GO
-
-    -- DECLARE @fcp_count INT = (SELECT COUNT(id) FROM Coupons WHERE code = @coupon_code);
-    -- DECLARE @found_coupon TABLE (id UNIQUEIDENTIFIER, valid_from DATETIME, expired_on DATETIME, quota INT);
-    -- DECLARE @fc_i TABLE (id UNIQUEIDENTIFIER, valid_from DATETIME, expired_on DATETIME, quota INT);
-
-    -- INSERT INTO @found_coupon 
-
-    -- DECLARE @i INT = 0;
-    -- WHILE @i < @fcp_count
-    -- BEGIN
-    --     INSERT INTO @fc_i SELECT * FROM @found_coupon LIMIT @i,1;
-    --     SET @i = @i + 1
-    -- END;
     
 CREATE FUNCTION checkCoupon
     (@coupon_code VARCHAR(32))
@@ -51,3 +38,39 @@ BEGIN
         SET @ok = (SELECT id FROM @found_coupon);
 	RETURN @ok;
 END;
+
+GO;
+
+CREATE FUNCTION checkRoomAvailable
+    (@room_id INT, @start DATE, @end DATE)
+RETURNS INT
+AS
+BEGIN
+    IF (SELECT COUNT(*) FROM Rooms AS r
+        INNER JOIN Bookings AS b ON r.id = b.room_id 
+        WHERE ((@start BETWEEN b."start" AND b."end") OR (@end BETWEEN b."start" AND b."end")) AND b.room_id = @room_id) < 1
+        RETURN 1;
+    RETURN 0;
+END;
+
+GO;
+
+CREATE FUNCTION getRoomPrice
+    (@room_id INT, @start DATE, @end DATE, @coupon_id UNIQUEIDENTIFIER = NULL)
+RETURNS NUMERIC
+AS
+BEGIN
+    DECLARE @c_value NUMERIC = 0;
+    DECLARE @amount NUMERIC = ( 
+        SELECT (DATEDIFF(day, @start,@end)+1)*t.price 
+        FROM Rooms as r INNER JOIN RoomTypes as t ON r.roomtype_id = t.id 
+         WHERE r.id = @room_id);
+    IF @coupon_id IS NOT NULL AND (SELECT COUNT(*) FROM Coupons WHERE id = @coupon_id) > 0
+    SET @c_value  = (
+        SELECT "value" FROM Coupons
+        WHERE id = @coupon_id
+    );
+    RETURN @amount-@c_value;
+END;
+
+GO;

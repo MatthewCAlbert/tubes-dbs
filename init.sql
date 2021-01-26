@@ -49,7 +49,7 @@ CREATE TABLE Bookings(
     "user_id" UNIQUEIDENTIFIER,
     room_id INT,
     payment_id UNIQUEIDENTIFIER,
-    coupon_id UNIQUEIDENTIFIER UNIQUE,
+    coupon_id UNIQUEIDENTIFIER,
     "start" DATE,
     "end" DATE,
     "status" INT,
