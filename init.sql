@@ -48,7 +48,7 @@ CREATE TABLE Bookings(
     id UNIQUEIDENTIFIER PRIMARY KEY,
     "user_id" UNIQUEIDENTIFIER,
     room_id INT,
-    payment_id UNIQUEIDENTIFIER,
+    payment_id UNIQUEIDENTIFIER UNIQUE,
     coupon_id UNIQUEIDENTIFIER,
     "start" DATE,
     "end" DATE,

@@ -78,7 +78,7 @@ END;
 
 GO;
 
--- bookRoom()
+-- bookRoom() start: check in + end: check out DATE
 CREATE PROCEDURE bookRoom
     @user_id UNIQUEIDENTIFIER, 
     @room_id INT, 
@@ -107,11 +107,15 @@ BEGIN
         RETURN;
     END
 
+
     IF ( dbo.checkRoomAvailable(@room_id, @start, @end) ) = 1
         BEGIN
+            DECLARE @b_id UNIQUEIDENTIFIER = NEWID();
+            DECLARE @buffer NVARCHAR(MAX) = @b_id;
             INSERT INTO Bookings(id, user_id, room_id, payment_id, coupon_id, "start", "end", "status") 
-            VALUES (NEWID(), @user_id, @room_id, NULL, @c_id, @start, @end, 0);
+            VALUES (@b_id, @user_id, @room_id, NULL, @c_id, @start, DATEADD(DAY,-1, @end), 0);
             PRINT 'Booking Success';
+            PRINT 'Booking ID #'+@buffer;
         END
     ELSE
         PRINT 'Booking Failed';
@@ -144,7 +148,7 @@ END;
 
 GO;
 
--- createCoupon()
+-- createCoupon() use time in UTC+7
 CREATE PROCEDURE createCoupon
     @code VARCHAR(32), 
     @valid_from DATETIME,
@@ -178,16 +182,197 @@ BEGIN
     END
 
     INSERT INTO Coupons VALUES
-        (NEWID(),@code,@valid_from,@expired_on,@quota,@value);
+        (NEWID(),@code, DATEADD(hour, -7, @valid_from),DATEADD(hour, -7, @expired_on),@quota,@value);
     PRINT 'Coupon successfully created!';
 END;
 
 GO;
 
---confirmPayment()
+-- getBooking()
+CREATE PROCEDURE getBooking
+    @booking_id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
 
---requestRefund()
+    DECLARE @booking TABLE(id UNIQUEIDENTIFIER, "user_id" UNIQUEIDENTIFIER, room_id INT, payment_id UNIQUEIDENTIFIER, coupon_id UNIQUEIDENTIFIER, "start" DATE, "end" DATE, "status" INT, created_on DATETIME);
+    INSERT INTO @booking SELECT * FROM Bookings WHERE id = @booking_id
+    
+    DECLARE @coupon TABLE(code VARCHAR(32),"value" NUMERIC);
 
---acceptRefund()
+    DECLARE @payment TABLE(id UNIQUEIDENTIFIER,amount NUMERIC,method VARCHAR(20),"status" INT,"time" DATETIME)
+    INSERT INTO @payment SELECT id,amount,method,"status","time" FROM Payments WHERE id = (SELECT payment_id FROM @booking);
 
---rejectRefund()
+    DECLARE @room TABLE(id INT, roomtype_id INT,"no" VARCHAR(10),info VARCHAR(255));
+    INSERT INTO @room SELECT * FROM Rooms WHERE id = (SELECT room_id FROM @booking);
+
+    DECLARE @user 
+        TABLE(
+        email VARCHAR(320),title VARCHAR(6),first_name VARCHAR(255),last_name VARCHAR(255),"address" VARCHAR(255),country VARCHAR(32),phone_num VARCHAR(32));
+    INSERT INTO @user SELECT email,title,first_name,last_name,"address",country,phone_num FROM Users WHERE id = (SELECT "user_id" FROM @booking);
+    
+
+    DECLARE @buffer NVARCHAR(MAX) = '';
+
+    SET @buffer = (SELECT id FROM @booking);
+    PRINT 'Booking Id #'+@buffer;
+    SET @buffer = DATEADD(hour, 7, (SELECT created_on FROM @booking));
+    PRINT 'Date (UTC+7): '+@buffer;
+    DECLARE @dur INT = DATEDIFF(day, (SELECT "start" FROM @booking),(SELECT "end" FROM @booking))+1;
+    SET @buffer = @dur;
+    PRINT 'Duration: '+@buffer+ CASE 
+        WHEN @dur > 1 THEN ' nights' 
+        ELSE ' night' 
+    END;
+    SET @buffer = (SELECT "start" FROM @booking);
+    PRINT 'Check-in: '+@buffer+' 12:00 PM';
+    SET @buffer = (SELECT DATEADD(DAY,1, "end") FROM @booking);
+    PRINT 'Check-out: '+@buffer+' 12:00 PM';
+    SET @buffer = dbo.getStatusCodeInfo((SELECT "status" FROM @booking),'bookings');
+    PRINT 'Status: '+@buffer;
+
+    PRINT '';
+
+    IF (SELECT coupon_id FROM @booking) IS NOT NULL
+    BEGIN
+        INSERT @coupon SELECT code,"value" FROM Coupons WHERE id = (SELECT coupon_id FROM @booking);
+        PRINT 'Used Coupon Info:'
+        SET @buffer = (SELECT code FROM @coupon);
+        PRINT 'Code: '+@buffer;
+        SET @buffer = CONVERT(NVARCHAR, CAST((SELECT "value" FROM @coupon) AS money), 1);
+        PRINT 'Value: IDR '+@buffer;
+    END
+
+    PRINT '';
+
+    PRINT 'Payment Info:'
+    SET @buffer = (SELECT id FROM @payment);
+    PRINT 'ID: #'+@buffer;
+    SET @buffer = CONVERT(NVARCHAR, CAST((SELECT amount FROM @payment) AS money), 1);
+    PRINT 'Amount: IDR '+@buffer;
+    SET @buffer = (SELECT method FROM @payment);
+    PRINT 'Method: '+@buffer;
+    SET @buffer = dbo.getStatusCodeInfo((SELECT "status" FROM @payment),'payments');
+    PRINT 'Status: '+@buffer;
+    SET @buffer = (SELECT "time" FROM @payment);
+    PRINT 'Payment Time: '+@buffer;
+
+    PRINT '';
+
+    PRINT 'Room Info: '
+    SET @buffer = (SELECT "name" FROM RoomTypes WHERE id = (SELECT roomtype_id FROM @room));
+    PRINT 'Type: '+@buffer;
+    SET @buffer = (SELECT "no" FROM @room);
+    PRINT 'No: '+@buffer;
+     SET @buffer = (SELECT info FROM @room);
+    PRINT 'Info: '+@buffer;
+
+    PRINT 'Guest Info: '
+    SET @buffer = (SELECT email FROM @user);
+    PRINT 'Email: '+@buffer;
+    SET @buffer = (SELECT title FROM @user)+'. '+(SELECT last_name FROM @user)+', '+(SELECT first_name FROM @user);
+    PRINT 'Name: '+@buffer;
+    SET @buffer = (SELECT "address" FROM @user)+', '+(SELECT country FROM @user);
+    PRINT 'Address: '+@buffer;
+    SET @buffer = (SELECT phone_num FROM @user);
+    PRINT 'Phone: '+@buffer;
+END;
+
+GO;
+
+-- checkIn()
+CREATE PROCEDURE checkIn
+    @booking_id UNIQUEIDENTIFIER
+AS
+BEGIN
+    DECLARE @booking TABLE(room_id INT, payment_id UNIQUEIDENTIFIER, "user_id" UNIQUEIDENTIFIER, "start" DATE, "end" DATE, "status" INT, payment_status INT);
+    INSERT INTO @booking
+    SELECT b.room_id, b.payment_id, b."user_id", b."start",b."end",b."status",p."status" AS payment_status  FROM Bookings as b INNER JOIN Payments as p ON b.payment_id = p.id WHERE b.id = @booking_id;
+
+
+    IF 
+        (SELECT "status" FROM @booking) = 1 OR (SELECT "status" FROM @booking) = 4 
+        OR 
+        (SELECT payment_status FROM @booking) = 1 OR (SELECT payment_status FROM @booking) = 4
+        BEGIN
+            DECLARE @user 
+                TABLE(title VARCHAR(6),first_name VARCHAR(255),last_name VARCHAR(255));
+            INSERT INTO @user SELECT title,first_name,last_name FROM Users WHERE id = (SELECT "user_id" FROM @booking);
+            
+            DECLARE @buffer NVARCHAR(MAX);
+            SET @buffer = (SELECT title FROM @user)+'. '+(SELECT last_name FROM @user)+', '+(SELECT first_name FROM @user);
+            PRINT 'Guest: '+@buffer;
+            PRINT 'Check In OK!'
+
+            SET @buffer = (SELECT "start" FROM @booking);
+            PRINT 'Check-in: '+@buffer+' 12:00 PM';
+            SET @buffer = (SELECT DATEADD(DAY,1, "end") FROM @booking);
+            PRINT 'Check-out: '+@buffer+' 12:00 PM';
+        END
+    ELSE
+        PRINT 'Check In Denied!'
+END;
+
+GO;
+
+-- confirmPayment()
+CREATE PROCEDURE confirmPayment
+	@payment_id UNIQUEIDENTIFIER
+AS
+BEGIN
+	UPDATE Payments
+	SET
+		"status" = 1
+	WHERE id = @payment_id;
+
+    UPDATE Bookings SET "status" = 1 WHERE payment_id = @payment_id;
+    PRINT 'Payment Success'
+END;
+
+GO;
+
+-- requestCancel()
+CREATE PROCEDURE requestCancel
+	@booking_id UNIQUEIDENTIFIER
+AS
+BEGIN
+    IF (SELECT "status" FROM Payments WHERE id = (SELECT payment_id FROM Bookings WHERE id = @booking_id)) = 1
+        BEGIN
+        UPDATE Bookings
+        SET
+            "status" = 2
+        WHERE id = @booking_id;
+        PRINT 'Cancellation Requested';
+        END
+    ELSE
+        PRINT 'Cancellation Request Invalid';
+END;
+
+GO;
+
+-- respondCancellation()
+CREATE PROCEDURE respondCancellation
+	@payment_id UNIQUEIDENTIFIER,
+	@allow INT
+AS
+BEGIN
+	IF @allow = 1
+	BEGIN
+		UPDATE Payments
+		SET
+			"status" = 3
+		WHERE id = @payment_id
+        PRINT 'Refund Accepted'
+	END
+
+	IF @allow = 0
+	BEGIN
+		UPDATE Payments
+		SET
+			"status" = 4
+		WHERE id = @payment_id
+        PRINT 'Refund Denied'
+	END
+END;
+
+GO;

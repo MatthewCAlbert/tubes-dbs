@@ -76,3 +76,34 @@ BEGIN
 END;
 
 GO;
+
+
+CREATE FUNCTION getStatusCodeInfo
+    (@code INT, @typ VARCHAR(12))
+RETURNS VARCHAR(32)
+AS
+BEGIN
+    IF @typ = 'bookings'
+    RETURN 
+        CASE 
+            WHEN @code = 0 THEN 'Waiting Payment'
+            WHEN @code = 1 THEN 'Success'
+            WHEN @code = 2 THEN 'Request Cancel'
+            WHEN @code = 3 THEN 'Cancel Success'
+            WHEN @code = 4 THEN 'Cancel Denied'
+            WHEN @code = 5 THEN 'Failed'
+        END;
+    IF @typ = 'payments'
+    RETURN
+        CASE 
+            WHEN @code = 0 THEN 'Waiting Payment'
+            WHEN @code = 1 THEN 'Success'
+            WHEN @code = 2 THEN 'Request Refund'
+            WHEN @code = 3 THEN 'Refund Success'
+            WHEN @code = 4 THEN 'Refund Denied'
+            WHEN @code = 5 THEN 'Failed'
+        END;
+    RETURN NULL;
+END;
+
+GO;

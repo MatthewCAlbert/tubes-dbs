@@ -1,29 +1,35 @@
 # Tugas Matkul Database System
 
+## Notes
+- Time in database are stored in UTC+0
+- But the interaction using procedures are using UTC+7
+
 ## To Do PROCEDURE & FUNCTION & TRIGGER
 - [x] Book a Room
 - [x] Calculate Booking Price
-- [ ] Generate Payment (Trigger)
+- [x] Generate Payment (Trigger)
 - [x] Create Coupon
 - [x] Check Wanted Room Availability
 - [x] Get All Room Available (on date range)
-- [ ] Request Cancellation
-- [ ] Change payment status to request refund (When cancel triggered)
-- [ ] Accept Refund 
-- [ ] Change booking status to cancel success (When refund accepted triggered)
-- [ ] Deny Refund 
-- [ ] Change booking status to cancel denied (When refund denied triggered)
-- [ ] Confirm Payment
+- [x] Request Cancellation
+- [x] Change payment status to request refund (When cancel triggered)
+- [x] Accept Refund 
+- [x] Change booking status to cancel success (When refund accepted triggered)
+- [x] Deny Refund 
+- [x] Change booking status to cancel denied (When refund denied triggered)
+- [x] Confirm Payment
 - [x] Check Coupon
 - [x] Hash and Verify Password
 - [x] Create Account
+- [x] Check In
 
 ## To Do SELECT
 - [ ] Get Booking Price Info
 - [ ] Get a User All Booking Info
-- [ ] Get a Booking Info
+- [x] Get a Booking Info
+- [ ] Get Pending Cancel List
 - [ ] Get All Booking Info
-- [ ] Get sales info (can select date range)
+- [ ] Get Sales Info (can select date range)
 
 ## Status Code
 ### "Bookings" Table
