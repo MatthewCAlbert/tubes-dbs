@@ -85,7 +85,6 @@ END;
 
 GO;
 
-
 CREATE FUNCTION getStatusCodeInfo
     (@code INT, @typ VARCHAR(12))
 RETURNS VARCHAR(32)

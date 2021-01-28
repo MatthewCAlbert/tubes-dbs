@@ -415,9 +415,48 @@ END;
 
 GO;
 
--- getAllUserBookingInfo()
-
 -- getAllBookingInfo()
+CREATE PROCEDURE getAllBookingInfo
+AS
+BEGIN
+    SELECT b.id, u.id as "user_id", p.id as payment_id, 
+    ('Check-in: '+CAST(b."start" AS VARCHAR)+' 12:00 PM') as "in", 
+    ('Check-out: '+CAST(DATEADD(DAY,1,b."end") AS VARCHAR)+' 12:00 PM') as "out", 
+    r."no" as room_no,
+    p.amount, DATEADD(hour, 7,p."time") as payment_time,
+    c.code as coupon_code, c."value" as coupon_value,
+    (u.address+', '+u.country) as "address",
+    (u.title+'. '+u.last_name+', '+u.first_name) as "name",
+    u.email, u.phone_num,
+    dbo.getStatusCodeInfo(b."status",'bookings') as "status", 
+    DATEADD(hour, 7,b."created_on") as created_on
+
+    FROM Bookings AS b LEFT JOIN Rooms as r ON b.room_id = r.id LEFT JOIN Users as u ON b.user_id = u.id LEFT JOIN Payments as p ON b.payment_id = p.id LEFT JOIN Coupons as c ON b.coupon_id = c.id 
+END;
+
+GO;
+
+-- getAllUserBookingInfo()
+CREATE PROCEDURE getAllUserBookingInfo
+    @user_id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SELECT b.id, u.id as "user_id", p.id as payment_id, 
+    ('Check-in: '+CAST(b."start" AS VARCHAR)+' 12:00 PM') as "in", 
+    ('Check-out: '+CAST(DATEADD(DAY,1,b."end") AS VARCHAR)+' 12:00 PM') as "out", 
+    r."no" as room_no,
+    p.amount, DATEADD(hour, 7,p."time") as payment_time,
+    c.code as coupon_code, c."value" as coupon_value,
+    (u.address+', '+u.country) as "address",
+    (u.title+'. '+u.last_name+', '+u.first_name) as "name",
+    u.email, u.phone_num,
+    dbo.getStatusCodeInfo(b."status",'bookings') as "status", 
+    DATEADD(hour, 7,b."created_on") as created_on
+
+    FROM Bookings AS b LEFT JOIN Rooms as r ON b.room_id = r.id LEFT JOIN Users as u ON b.user_id = u.id LEFT JOIN Payments as p ON b.payment_id = p.id LEFT JOIN Coupons as c ON b.coupon_id = c.id WHERE b.user_id = @user_id;
+END;
+
+GO;
 
 -- getPendingCancelList()
 CREATE PROCEDURE getPendingCancelList

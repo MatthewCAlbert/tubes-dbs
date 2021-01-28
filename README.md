@@ -25,8 +25,8 @@
 
 ## To Do SELECT
 - [x] Get Booking Price Info
-- [ ] Get All Booking Info
-- [ ] Get a User All Booking Info
+- [x] Get All Booking Info
+- [x] Get a User All Booking Info
 - [x] Get a Booking Info
 - [x] Get Pending Cancel List
 - [x] Get Sales Info (can select date range)
