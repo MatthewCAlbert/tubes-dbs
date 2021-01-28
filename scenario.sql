@@ -54,6 +54,17 @@ EXEC createAccount
 
 SELECT * FROM Users;
 
+-- edit an account info
+EXEC editAccountInfo
+	@id = 'insert_uuid_here',
+    @title = NULL,
+    @first_name = NULL,
+    @last_name  = NULL,
+    @address  = NULL,
+    @country = NULL,
+    @phone_num  = NULL,
+    @birth_date = NULL;
+
 -- Test Login
 EXEC accountLogin
 	@email = 'matthew.albert@binus.ac.id',
