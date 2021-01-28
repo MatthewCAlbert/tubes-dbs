@@ -54,9 +54,9 @@
 
 ## Main File (execute in order)
 - init.sql - Data Definition Languange (DDL)
-- function.sql - Create SQL Stored Functions
-- procedure.sql - Create SQL Stored Procedures
-- trigger.sql - Create SQL Triggers
+- function.sql - Create SQL Stored Functions (DQL)
+- procedure.sql - Create SQL Stored Procedures (DQL + DML)
+- trigger.sql - Create SQL Triggers (DQL + DML)
 
 ## seed.sql
 - Contain initial dummy data to start demo/testing/development of this project.
