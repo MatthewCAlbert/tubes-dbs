@@ -354,7 +354,8 @@ AS
 BEGIN
 	UPDATE Payments
 	SET
-		"status" = 1
+		"status" = 1,
+        "time" = getutcdate()
 	WHERE id = @payment_id;
 
     UPDATE Bookings SET "status" = 1 WHERE payment_id = @payment_id;
@@ -370,11 +371,11 @@ AS
 BEGIN
     IF (SELECT "status" FROM Payments WHERE id = (SELECT payment_id FROM Bookings WHERE id = @booking_id)) = 1
         BEGIN
-        UPDATE Bookings
-        SET
-            "status" = 2
-        WHERE id = @booking_id;
-        PRINT 'Cancellation Requested';
+            UPDATE Bookings
+            SET
+                "status" = 2
+            WHERE id = @booking_id;
+            PRINT 'Cancellation Requested';
         END
     ELSE
         PRINT 'Cancellation Request Invalid';
@@ -419,5 +420,19 @@ GO;
 -- getAllBookingInfo()
 
 -- getPendingCancelList()
+CREATE PROCEDURE getPendingCancelList
+AS
+BEGIN
+    SELECT b.id, p.id AS payment_id, b.user_id, b.room_id, p.amount, b."start", DATEADD(day,1,b."end") AS "end", u.email, u.phone_num, u.title, u.first_name, u.last_name FROM Bookings AS b INNER JOIN Payments AS p ON b.payment_id = p.id INNER JOIN Users as u ON b.user_id = u.id WHERE p."status" = 2
+END;
+
+GO
 
 -- getSalesInfo()
+CREATE PROCEDURE getSalesInfo
+    @start DATE, 
+    @end DATE
+AS
+BEGIN
+    SELECT SUM(amount) AS TotalSales, COUNT(amount) AS "count" FROM Payments WHERE ("status" = 1 OR "status" = 4) AND "time" >= @start AND "time" <= @end;
+END;

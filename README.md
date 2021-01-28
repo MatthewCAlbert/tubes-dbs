@@ -25,11 +25,11 @@
 
 ## To Do SELECT
 - [x] Get Booking Price Info
+- [ ] Get All Booking Info
 - [ ] Get a User All Booking Info
 - [x] Get a Booking Info
-- [ ] Get Pending Cancel List
-- [ ] Get All Booking Info
-- [ ] Get Sales Info (can select date range)
+- [x] Get Pending Cancel List
+- [x] Get Sales Info (can select date range)
 
 ## Status Code
 ### "Bookings" Table

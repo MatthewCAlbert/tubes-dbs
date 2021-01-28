@@ -59,3 +59,8 @@ EXEC changePassword
 	@user_id = 'F413CB31-568A-4DB4-89FD-288C363B252C',
 	@old_password = '12345',
     @new_password = '123456'
+
+EXEC getPendingCancelList
+
+EXEC requestCancel
+	@booking_id = 'F9A1AE20-4B4B-4A49-B339-3B59B5A81CCA'
