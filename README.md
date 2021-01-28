@@ -5,8 +5,8 @@
 - But the interaction using procedures are using UTC+7
 
 ### Booking date recorded in the table follow these rule
-- Example: 9-Jan-2021 12pm until 10-Jan-2021 12pm will be recorded as start(2020-01-9), end(2020-01-9) (because it was count as 1 night stay)
-- Example: 9-Jan-2021 12pm until 12-Jan-2021 12pm will be recorded as start(2020-01-9), end(2020-01-11) (because it was count as 3 night stay)
+- Example: Stays for 9-Jan-2021 12pm until 10-Jan-2021 12pm will be recorded as start(2020-01-9), end(2020-01-9) (because it was count as 1 night stay)
+- Example: Stays for 9-Jan-2021 12pm until 12-Jan-2021 12pm will be recorded as start(2020-01-9), end(2020-01-11) (because it was count as 3 night stay)
 
 ## To Do PROCEDURE & FUNCTION & TRIGGER
 - [x] Book a Room

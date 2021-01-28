@@ -64,6 +64,8 @@ EXEC editAccountInfo
     @country = NULL,
     @phone_num  = NULL,
     @birth_date = NULL;
+    
+SELECT * FROM Users;
 
 -- Test Login
 EXEC accountLogin
