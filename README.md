@@ -1,8 +1,12 @@
-# Tugas Matkul Database System
+# Database System Final Project
 
 ## Notes
 - Time in database are stored in UTC+0
 - But the interaction using procedures are using UTC+7
+
+### Booking date recorded in the table follow these rule
+- Example: 9-Jan-2021 12pm until 10-Jan-2021 12pm will be recorded as start(2020-01-9), end(2020-01-9) (because it was count as 1 night stay)
+- Example: 9-Jan-2021 12pm until 12-Jan-2021 12pm will be recorded as start(2020-01-9), end(2020-01-11) (because it was count as 3 night stay)
 
 ## To Do PROCEDURE & FUNCTION & TRIGGER
 - [x] Book a Room
@@ -48,5 +52,18 @@
 - 4 : Refund Denied
 - 5 : Failed
 
+## Main File (execute in order)
+- init.sql - Data Definition Languange (DDL)
+- function.sql - Create SQL Stored Functions
+- procedure.sql - Create SQL Stored Procedures
+- trigger.sql - Create SQL Triggers
+
 ## seed.sql
-- Contain initial dummy data to start demo of this project
+- Contain initial dummy data to start demo/testing/development of this project.
+
+## demo.sql
+- Piles of examples for procedure usage.
+
+## scenario.sql
+- Contain sql in order for demo video purpose.
+- Customize user info and NIM if necessary.

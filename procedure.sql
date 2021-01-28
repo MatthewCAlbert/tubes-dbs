@@ -6,7 +6,10 @@ CREATE PROCEDURE accountLogin
     @password varchar(64)
 AS
 BEGIN
-    SELECT dbo.verifyPassword(@password, password) AS result FROM Users WHERE email = @email;
+    IF (SELECT dbo.verifyPassword(@password, password) FROM Users WHERE email = @email) = 1
+        PRINT 'Login Success!';
+    ELSE
+        PRINT 'Login Failed!';
 END;
 
 GO;
@@ -469,8 +472,8 @@ GO
 
 -- getSalesInfo()
 CREATE PROCEDURE getSalesInfo
-    @start DATE, 
-    @end DATE
+    @start DATE = '1970-01-01', 
+    @end DATE = '2100-01-01'
 AS
 BEGIN
     SELECT SUM(amount) AS TotalSales, COUNT(amount) AS "count" FROM Payments WHERE ("status" = 1 OR "status" = 4) AND "time" >= @start AND "time" <= @end;
