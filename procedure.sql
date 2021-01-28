@@ -173,6 +173,8 @@ BEGIN
             (SELECT r.id FROM Rooms AS r
             INNER JOIN Bookings AS b ON r.id = b.room_id 
             WHERE (@start BETWEEN b."start" AND b."end") OR (@end BETWEEN b."start" AND b."end") AND (b."status" != 3 AND b."status" != 5)) AND roomtype_id = @roomtype_id;
+
+            SELECT dbo.getRoomPrice(@roomtype_id,NULL,@start, DATEADD(DAY,-1, @end), NULL) AS totalPrice;
         END
 END;
 

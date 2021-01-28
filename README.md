@@ -24,7 +24,7 @@
 - [x] Check In
 
 ## To Do SELECT
-- [ ] Get Booking Price Info
+- [x] Get Booking Price Info
 - [ ] Get a User All Booking Info
 - [x] Get a Booking Info
 - [ ] Get Pending Cancel List

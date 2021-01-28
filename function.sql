@@ -56,15 +56,23 @@ END;
 GO;
 
 CREATE FUNCTION getRoomPrice
-    (@room_id INT, @start DATE, @end DATE, @coupon_id UNIQUEIDENTIFIER = NULL)
+    (@roomtype_id INT = NULL, @room_id INT = NULL, @start DATE, @end DATE, @coupon_id UNIQUEIDENTIFIER = NULL)
 RETURNS NUMERIC
 AS
 BEGIN
     DECLARE @c_value NUMERIC = 0;
-    DECLARE @amount NUMERIC = ( 
-        SELECT (DATEDIFF(day, @start,@end)+1)*t.price 
-        FROM Rooms as r INNER JOIN RoomTypes as t ON r.roomtype_id = t.id 
-         WHERE r.id = @room_id);
+    DECLARE @amount NUMERIC;
+
+    IF @roomtype_id IS NULL
+        SET @amount = ( 
+            SELECT (DATEDIFF(day, @start,@end)+1)*t.price 
+            FROM Rooms as r INNER JOIN RoomTypes as t ON r.roomtype_id = t.id 
+            WHERE r.id = @room_id);
+    ELSE
+        SET @amount = ( 
+            SELECT (DATEDIFF(day, @start,@end)+1)*price 
+            FROM RoomTypes WHERE id = @roomtype_id);
+
     IF @coupon_id IS NOT NULL AND (SELECT COUNT(*) FROM Coupons WHERE id = @coupon_id) > 0
     SET @c_value  = (
         SELECT "value" FROM Coupons

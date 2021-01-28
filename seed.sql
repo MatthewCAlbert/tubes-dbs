@@ -23,11 +23,9 @@ INSERT INTO Rooms VALUES
     (14,6,304,NULL),
     (15,6,305,NULL);
 
-
 EXEC createAccount @email='klein.rico@gmail.com', @password='wsNFH6wd', @title='Mr', @first_name='Rico', @last_name='Klein', @address='4626  Washington Avenue', @country='United States', @phone_num='(870) 572-9510', @birth_date='1996-12-01';
 
 EXEC createAccount @email='klein.ddoogami@gmail.com', @password='wsNFH6wddas', @title='Mr', @first_name='Rico', @last_name='Bucher', @address='320 KfC', @country='Indonesia', @phone_num='+62 8111', @birth_date='1993-12-01';
-
 
 INSERT INTO Coupons VALUES
     (NEWID(),'APP15','2021-01-04 00:00:00','2021-01-29 00:00:00',3,20000),

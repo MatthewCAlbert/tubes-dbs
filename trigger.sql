@@ -11,7 +11,7 @@ BEGIN
     VALUES
     (
         @p_id,
-        dbo.getRoomPrice((SELECT room_id FROM INSERTED), (SELECT "start" FROM INSERTED),(SELECT "end" FROM INSERTED), (SELECT coupon_id FROM INSERTED)),
+        dbo.getRoomPrice(NULL, (SELECT room_id FROM INSERTED), (SELECT "start" FROM INSERTED),(SELECT "end" FROM INSERTED), (SELECT coupon_id FROM INSERTED)),
         'transfer',
         0,
         NULL

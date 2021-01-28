@@ -18,7 +18,6 @@ EXEC bookRoom
 @end = '2021-02-23',
 @coupon_code = 'APP15';
 
-
 SELECT * FROM Bookings;
 
 SELECT dbo.checkRoomAvailable(8, '2020-12-01','2020-12-02')
@@ -38,3 +37,25 @@ EXEC createCoupon
     @value = 10000
 
 SELECT * FROM Coupons;
+
+EXEC checkIn
+	@booking_id = 'DA65A3E8-A377-4DE3-AC73-992FA608C3BB';
+
+EXEC getBooking
+    @booking_id = '8C09651C-3B07-49A1-AAB4-654EB91E5503'
+
+EXEC confirmPayment
+	@payment_id = '83D51A8F-689C-4605-AA29-FA9DB4D9831C'
+
+EXEC respondCancellation
+	@payment_id = '2C263A26-FD85-4BA8-A346-C775CE8D116E',
+	@allow = 1
+
+EXEC forceChangePassword
+	@user_id = 'F413CB31-568A-4DB4-89FD-288C363B252C',
+    @new_password = '12345'
+
+EXEC changePassword
+	@user_id = 'F413CB31-568A-4DB4-89FD-288C363B252C',
+	@old_password = '12345',
+    @new_password = '123456'
