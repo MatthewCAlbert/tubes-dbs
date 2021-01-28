@@ -11,6 +11,36 @@ END;
 
 GO;
 
+-- changePassword()
+CREATE PROCEDURE changePassword
+	@user_id UNIQUEIDENTIFIER,
+	@old_password varchar(64),
+    @new_password varchar(64)
+AS
+BEGIN
+    IF (SELECT dbo.verifyPassword(@old_password, "password") FROM Users WHERE id = @user_id) = 1
+        BEGIN
+            UPDATE Users SET "password" = dbo.hashPassword(@new_password) WHERE id = @user_id;
+            PRINT 'Password successfully changed';
+        END
+    ELSE
+        PRINT 'Invalid Credentials';
+END;
+
+GO;
+
+-- forceChangePassword()
+CREATE PROCEDURE forceChangePassword
+	@user_id UNIQUEIDENTIFIER,
+    @new_password varchar(64)
+AS
+BEGIN
+    UPDATE Users SET "password" = dbo.hashPassword(@new_password) WHERE id = @user_id;
+    PRINT 'Password successfully changed';
+END;
+
+GO;
+
 -- createAccount()
 CREATE PROCEDURE createAccount
 	@email varchar(320),
