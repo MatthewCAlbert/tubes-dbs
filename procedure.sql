@@ -87,25 +87,35 @@ GO;
 -- editAccount()
 CREATE PROCEDURE editAccountInfo
 	@id UNIQUEIDENTIFIER,
-    @title varchar(6),
-    @first_name varchar(255),
-    @last_name varchar(255),
-    @address varchar(255),
-    @country varchar(32),
-    @phone_num varchar(30),
-    @birth_date date
+    @title varchar(6) = NULL,
+    @first_name varchar(255) = NULL,
+    @last_name varchar(255) = NULL,
+    @address varchar(255) = NULL,
+    @country varchar(32) = NULL,
+    @phone_num varchar(30) = NULL,
+    @birth_date date = NULL
 AS
 BEGIN
-	SELECT * FROM Users
+    DECLARE @user TABLE(
+    title VARCHAR(6),
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    "address" VARCHAR(255),
+    country VARCHAR(32),
+    phone_num VARCHAR(32),
+    birth_date DATE);
+
+    INSERT INTO @user SELECT title,first_name,last_name,"address",country,phone_num,birth_date FROM Users WHERE id = @id;
+
 	UPDATE Users
 	SET
-		title = @title,
-		first_name = @first_name,
-		last_name = @last_name,
-		"address" = @address,
-		country = @country,
-		phone_num = @phone_num,
-        birth_date = @birth_date
+		title = CASE WHEN @title IS NOT NULL THEN @title ELSE (SELECT title FROM @user) END,
+		first_name = CASE WHEN @first_name IS NOT NULL THEN @first_name ELSE (SELECT first_name FROM @user) END,
+		last_name =  CASE WHEN @last_name IS NOT NULL THEN @last_name ELSE (SELECT last_name FROM @user) END,
+		"address" = CASE WHEN @address IS NOT NULL THEN @address ELSE (SELECT "address" FROM @user) END,
+		country = CASE WHEN @country IS NOT NULL THEN @country ELSE (SELECT country FROM @user) END,
+		phone_num = CASE WHEN @phone_num IS NOT NULL THEN @phone_num ELSE (SELECT phone_num FROM @user) END,
+        birth_date = CASE WHEN @birth_date IS NOT NULL THEN @birth_date ELSE (SELECT birth_date FROM @user) END
 	WHERE id = @id;
 END;
 

@@ -64,3 +64,15 @@ EXEC getPendingCancelList
 
 EXEC requestCancel
 	@booking_id = 'F9A1AE20-4B4B-4A49-B339-3B59B5A81CCA'
+
+EXEC editAccountInfo
+	@id = 'F413CB31-568A-4DB4-89FD-288C363B252C',
+    @title = NULL,
+    @first_name = NULL,
+    @last_name  = NULL,
+    @address  = NULL,
+    @country = NULL,
+    @phone_num  = NULL,
+    @birth_date = NULL
+
+SELECT * FROM Users;
