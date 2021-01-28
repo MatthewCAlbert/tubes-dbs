@@ -388,23 +388,36 @@ CREATE PROCEDURE respondCancellation
 	@allow INT
 AS
 BEGIN
-	IF @allow = 1
-	BEGIN
-		UPDATE Payments
-		SET
-			"status" = 3
-		WHERE id = @payment_id
-        PRINT 'Refund Accepted'
-	END
+    IF (SELECT "status" FROM Payments WHERE id = @payment_id) = 2
+    BEGIN
+        IF @allow = 1
+        BEGIN
+            UPDATE Payments
+            SET
+                "status" = 3
+            WHERE id = @payment_id
+            PRINT 'Refund Accepted'
+        END
 
-	IF @allow = 0
-	BEGIN
-		UPDATE Payments
-		SET
-			"status" = 4
-		WHERE id = @payment_id
-        PRINT 'Refund Denied'
-	END
+        IF @allow = 0
+        BEGIN
+            UPDATE Payments
+            SET
+                "status" = 4
+            WHERE id = @payment_id
+            PRINT 'Refund Denied'
+        END
+    END
+    ELSE
+        PRINT 'Invalid Booking!'
 END;
 
 GO;
+
+-- getAllUserBookingInfo()
+
+-- getAllBookingInfo()
+
+-- getPendingCancelList()
+
+-- getSalesInfo()
