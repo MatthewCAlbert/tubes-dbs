@@ -102,15 +102,15 @@ SELECT * FROM Rooms;
 EXEC bookRoom
     @user_id = 'insert_uuid_here',
     @room_id = 8,
-    @start = '2020-02-10',
-    @end = '2020-02-12',
+    @start = '2021-02-10',
+    @end = '2021-02-12',
     @coupon_code = NULL;
 
 EXEC bookRoom
     @user_id = 'insert_uuid_here',
     @room_id = 8,
-    @start = '2020-02-13',
-    @end = '2020-02-14',
+    @start = '2021-02-13',
+    @end = '2021-02-14',
     @coupon_code = 'DBS-2301848981';
 -- test Dupe Coupon
 
@@ -118,14 +118,14 @@ EXEC bookRoom
 EXEC bookRoom
     @user_id = 'insert_uuid_here',
     @room_id = 6,
-    @start = '2020-02-13',
-    @end = '2020-02-14',
+    @start = '2021-02-13',
+    @end = '2021-02-14',
     @coupon_code = 'DBS2-2301848981';
 EXEC bookRoom
     @user_id = 'insert_uuid_here',
     @room_id = 7,
-    @start = '2020-02-13',
-    @end = '2020-02-14',
+    @start = '2021-02-13',
+    @end = '2021-02-14',
     @coupon_code = 'DBS2-2301848981';
 -- test third Coupon
 
