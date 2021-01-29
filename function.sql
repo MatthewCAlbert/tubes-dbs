@@ -39,7 +39,7 @@ BEGIN
 	RETURN @ok;
 END;
 
-GO;
+GO
 
 CREATE FUNCTION checkRoomAvailable
     (@room_id INT, @start DATE, @end DATE)
@@ -53,7 +53,7 @@ BEGIN
     RETURN 0;
 END;
 
-GO;
+GO
 
 CREATE FUNCTION getRoomPrice
     (@roomtype_id INT = NULL, @room_id INT = NULL, @start DATE, @end DATE, @coupon_id UNIQUEIDENTIFIER = NULL)
@@ -83,7 +83,7 @@ BEGIN
     RETURN @amount-@c_value;
 END;
 
-GO;
+GO
 
 CREATE FUNCTION getStatusCodeInfo
     (@code INT, @typ VARCHAR(12))
@@ -113,4 +113,4 @@ BEGIN
     RETURN NULL;
 END;
 
-GO;
+GO

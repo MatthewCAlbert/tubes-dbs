@@ -12,7 +12,7 @@ BEGIN
         PRINT 'Login Failed!';
 END;
 
-GO;
+GO
 
 -- changePassword()
 CREATE PROCEDURE changePassword
@@ -30,7 +30,7 @@ BEGIN
         PRINT 'Invalid Credentials';
 END;
 
-GO;
+GO
 
 -- forceChangePassword()
 CREATE PROCEDURE forceChangePassword
@@ -42,7 +42,7 @@ BEGIN
     PRINT 'Password successfully changed';
 END;
 
-GO;
+GO
 
 -- createAccount()
 CREATE PROCEDURE createAccount
@@ -82,7 +82,7 @@ BEGIN
         getutcdate())
 END;
 
-GO;      
+GO      
 
 -- editAccount()
 CREATE PROCEDURE editAccountInfo
@@ -119,7 +119,7 @@ BEGIN
 	WHERE id = @id;
 END;
 
-GO;
+GO
 
 -- bookRoom() start: check in + end: check out DATE
 CREATE PROCEDURE bookRoom
@@ -164,7 +164,7 @@ BEGIN
         PRINT 'Booking Failed';
 END;
 
-GO;
+GO
 
 -- getAvailableRoom()
 CREATE PROCEDURE getAvailableRoom
@@ -191,7 +191,7 @@ BEGIN
         END
 END;
 
-GO;
+GO
 
 -- createCoupon() use time in UTC+7
 CREATE PROCEDURE createCoupon
@@ -231,7 +231,7 @@ BEGIN
     PRINT 'Coupon successfully created!';
 END;
 
-GO;
+GO
 
 -- getBooking()
 CREATE PROCEDURE getBooking
@@ -323,7 +323,7 @@ BEGIN
     PRINT 'Phone: '+@buffer;
 END;
 
-GO;
+GO
 
 -- checkIn()
 CREATE PROCEDURE checkIn
@@ -358,7 +358,7 @@ BEGIN
         PRINT 'Check In Denied!'
 END;
 
-GO;
+GO
 
 -- confirmPayment()
 CREATE PROCEDURE confirmPayment
@@ -375,7 +375,7 @@ BEGIN
     PRINT 'Payment Success'
 END;
 
-GO;
+GO
 
 -- requestCancel()
 CREATE PROCEDURE requestCancel
@@ -394,7 +394,7 @@ BEGIN
         PRINT 'Cancellation Request Invalid';
 END;
 
-GO;
+GO
 
 -- respondCancellation()
 CREATE PROCEDURE respondCancellation
@@ -426,7 +426,7 @@ BEGIN
         PRINT 'Invalid Booking!'
 END;
 
-GO;
+GO
 
 -- getAllBookingInfo()
 CREATE PROCEDURE getAllBookingInfo
@@ -447,7 +447,7 @@ BEGIN
     FROM Bookings AS b LEFT JOIN Rooms as r ON b.room_id = r.id LEFT JOIN Users as u ON b.user_id = u.id LEFT JOIN Payments as p ON b.payment_id = p.id LEFT JOIN Coupons as c ON b.coupon_id = c.id 
 END;
 
-GO;
+GO
 
 -- getAllUserBookingInfo()
 CREATE PROCEDURE getAllUserBookingInfo
@@ -469,7 +469,7 @@ BEGIN
     FROM Bookings AS b LEFT JOIN Rooms as r ON b.room_id = r.id LEFT JOIN Users as u ON b.user_id = u.id LEFT JOIN Payments as p ON b.payment_id = p.id LEFT JOIN Coupons as c ON b.coupon_id = c.id WHERE b.user_id = @user_id;
 END;
 
-GO;
+GO
 
 -- getPendingCancelList()
 CREATE PROCEDURE getPendingCancelList
