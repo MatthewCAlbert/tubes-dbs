@@ -27,14 +27,14 @@ INSERT INTO Rooms VALUES
 -- create Coupon
 EXEC createCoupon
     @code = 'DBS-2301848981', 
-    @valid_from = '2021-01-01',
-    @expired_on = '2021-02-30',
+    @valid_from = '2021-01-01 00:00',
+    @expired_on = '2021-02-28 00:00',
     @quota = 1,
     @value = 100000;
 EXEC createCoupon
     @code = 'DBS2-2301848981', 
-    @valid_from = '2021-01-01',
-    @expired_on = '2021-02-30',
+    @valid_from = '2021-01-01 00:00',
+    @expired_on = '2021-02-28 00:00',
     @quota = 2,
     @value = 50000;
 
@@ -64,7 +64,7 @@ EXEC editAccountInfo
     @country = NULL,
     @phone_num  = NULL,
     @birth_date = NULL;
-    
+
 SELECT * FROM Users;
 
 -- Test Login
